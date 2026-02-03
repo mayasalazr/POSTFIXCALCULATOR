@@ -1,67 +1,77 @@
 package calculadora;
 
-import java.util.Stack;
+import pilas.Stack;
 
-public class PostFixCalculatorI Implements PostfixCalculator{
+public class PostFixCalculatorI implements PostfixCalculator {
+
     private Stack<Integer> stack;
 
-    public PostFixCalculatorI (Stack<Integer> stack){
+    public PostFixCalculatorI(Stack<Integer> stack) {
         this.stack = stack;
-
     }
 
     @Override
-    public int evaluate(String expression){
-        String[] tokens = expression.spliy(" ");
-        for (String toke : tokens){
-            if (isNumber(token)){
+    public int evaluate(String expression) {
+
+        String[] tokens = expression.split(" ");
+
+        for (String token : tokens) {
+
+            if (isNumber(token)) {
                 stack.push(Integer.parseInt(token));
 
+            } else if (isOperator(token)) {
 
-            } else if (isOperator(token)){
-                if (stack.size() < 2){
+                if (stack.size() < 2) {
                     throw new RuntimeException("Operandos insuficientes");
-
                 }
-                int b= stack.pop();
+
+                int b = stack.pop();
                 int a = stack.pop();
-                int result = applyOperTOR(A, B, token);
+                int result = applyOperator(a, b, token);
 
                 stack.push(result);
 
-            }else {
-                System.out.println("Invalido:" + token);
-
+            } else {
+                throw new RuntimeException("Token inválido: " + token);
             }
+        }
 
-            
+        if (stack.size() != 1) {
+            throw new RuntimeException("Expresión postfix inválida");
         }
 
         return stack.pop();
     }
-    private boolean isOperator(String s){
-            return"+-*/".contains(s);
+
+    private boolean isNumber(String s) {
+        return s.matches("-?\\d+");
     }
-    private int applyOperator(int a, int b, String op){
-        switch(op){
+
+    private boolean isOperator(String s) {
+        return "+-*/".contains(s);
+    }
+
+    private int applyOperator(int a, int b, String op) {
+
+        switch (op) {
             case "+":
                 return a + b;
-
             case "-":
                 return a - b;
             case "*":
                 return a * b;
             case "/":
-                if ( b== 0){
-                    System.out.println("División invalidad: entre cero");
-
+                if (b == 0) {
+                    throw new ArithmeticException("División entre cero");
                 }
                 return a / b;
-
-
+            default:
+                throw new IllegalArgumentException("Operador desconocido");
         }
     }
 }
+
 
 
 

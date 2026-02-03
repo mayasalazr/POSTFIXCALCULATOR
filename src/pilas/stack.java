@@ -1,6 +1,6 @@
 package pilas;
 
-public class stack<E> {
+public interface  Stack<E> {
     void push(E item);
     E pop();
     E peek();
